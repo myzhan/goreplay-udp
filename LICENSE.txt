@@ -1,0 +1,12 @@
+goreplay-udp is an Open Source project licensed under the terms of
+the LGPLv3 license.  Please see <http://www.gnu.org/licenses/lgpl-3.0.html>
+for license text.
+
+As a special exception to the GNU Lesser General Public License version 3
+("LGPL3"), the copyright holders of this Library give you permission to
+convey to a third party a Combined Work that links statically or dynamically
+to this Library without providing any Minimal Corresponding Source or
+Minimal Application Code as set out in 4d or providing the installation
+information set out in section 4e, provided that you comply with the other
+provisions of LGPL3 and provided that you meet, for the Application the
+terms and conditions of the license(s) which apply to the Application.
