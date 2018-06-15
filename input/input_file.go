@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
+	"github.com/myzhan/goreplay-udp/proto"
 	"io"
 	"log"
 	"os"
@@ -13,7 +14,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"github.com/myzhan/goreplay-udp/proto"
 )
 
 type fileInputReader struct {

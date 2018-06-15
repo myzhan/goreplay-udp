@@ -1,8 +1,8 @@
 package main
 
 import (
-	"io"
 	"flag"
+	"io"
 	"log"
 	"os"
 	"os/signal"

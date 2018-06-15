@@ -1,14 +1,14 @@
 package proto
 
 import (
-	"github.com/google/gopacket/layers"
-	"github.com/google/gopacket"
-	"log"
-	"time"
 	"crypto/sha1"
 	"encoding/hex"
-	"strconv"
 	"fmt"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
+	"log"
+	"strconv"
+	"time"
 )
 
 type UDPMessage struct {
@@ -53,7 +53,7 @@ func (m *UDPMessage) UUID() []byte {
 	return uuid
 }
 
-func (m *UDPMessage) Data() ([]byte) {
+func (m *UDPMessage) Data() []byte {
 	return m.data
 }
 

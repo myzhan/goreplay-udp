@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
+	"github.com/myzhan/goreplay-udp/input"
 	"io"
 	"math/rand"
 	"strconv"
 	"strings"
 	"time"
-	"github.com/myzhan/goreplay-udp/input"
 )
 
 // Limiter is a wrapper for input or output plugin which adds rate limiting

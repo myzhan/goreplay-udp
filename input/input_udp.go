@@ -1,10 +1,10 @@
 package input
 
 import (
-	"github.com/myzhan/goreplay-udp/proto"
 	"github.com/myzhan/goreplay-udp/listener"
-	"net"
+	"github.com/myzhan/goreplay-udp/proto"
 	"log"
+	"net"
 )
 
 type UDPInput struct {

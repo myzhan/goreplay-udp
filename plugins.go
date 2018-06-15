@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/myzhan/goreplay-udp/input"
+	"github.com/myzhan/goreplay-udp/output"
 	"io"
 	"reflect"
 	"strings"
 	"sync"
-	"github.com/myzhan/goreplay-udp/output"
-	"github.com/myzhan/goreplay-udp/input"
 )
 
 // InOutPlugins struct for holding references to plugins
@@ -35,7 +35,7 @@ func extractLimitOptions(options string) (string, string) {
 
 // Automatically detects type of plugin and initialize it
 //
-// See this article if curious about relfect stuff below: http://blog.burntsushi.net/type-parametric-functions-golang
+// See this article if curious about reflect stuff below: http://blog.burntsushi.net/type-parametric-functions-golang
 func registerPlugin(constructor interface{}, options ...interface{}) {
 	var path, limit string
 	vc := reflect.ValueOf(constructor)
@@ -56,12 +56,9 @@ func registerPlugin(constructor interface{}, options ...interface{}) {
 
 	// Calling our constructor with list of given options
 	plugin := vc.Call(vo)[0].Interface()
-	pluginWrapper := plugin
 
 	if limit != "" {
-		pluginWrapper = NewLimiter(plugin, limit)
-	} else {
-		pluginWrapper = plugin
+		plugin = NewLimiter(plugin, limit)
 	}
 
 	_, isR := plugin.(io.Reader)
@@ -69,11 +66,11 @@ func registerPlugin(constructor interface{}, options ...interface{}) {
 
 	// Some of the output can be Readers as well because return responses
 	if isR && !isW {
-		Plugins.Inputs = append(Plugins.Inputs, pluginWrapper.(io.Reader))
+		Plugins.Inputs = append(Plugins.Inputs, plugin.(io.Reader))
 	}
 
 	if isW {
-		Plugins.Outputs = append(Plugins.Outputs, pluginWrapper.(io.Writer))
+		Plugins.Outputs = append(Plugins.Outputs, plugin.(io.Writer))
 	}
 
 	Plugins.All = append(Plugins.All, plugin)

@@ -1,18 +1,18 @@
 package listener
 
 import (
-	"time"
-	"github.com/google/gopacket/pcap"
-	"sync"
-	"log"
-	"runtime"
-	"net"
-	"strings"
-	"strconv"
+	"encoding/binary"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
+	"github.com/google/gopacket/pcap"
 	"io"
-	"encoding/binary"
+	"log"
+	"net"
+	"runtime"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
 )
 
 type ipPacket struct {

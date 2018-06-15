@@ -1,11 +1,11 @@
 package output
 
 import (
-	"time"
-	"github.com/myzhan/goreplay-udp/stats"
 	"github.com/myzhan/goreplay-udp/client"
-	"sync/atomic"
 	"github.com/myzhan/goreplay-udp/proto"
+	"github.com/myzhan/goreplay-udp/stats"
+	"sync/atomic"
+	"time"
 )
 
 const initialDynamicWorkers = 10

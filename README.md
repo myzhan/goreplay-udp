@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/myzhan/goreplay-udp)](https://goreportcard.com/report/github.com/myzhan/goreplay-udp)
+
 # About
 
 GoReplay-udp is copycat of [goreplay](https://github.com/buger/goreplay), works on UDP tracffic.

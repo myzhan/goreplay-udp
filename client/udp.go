@@ -1,9 +1,9 @@
 package client
 
 import (
-	"time"
-	"net"
 	"log"
+	"net"
+	"time"
 )
 
 type UDPClient struct {

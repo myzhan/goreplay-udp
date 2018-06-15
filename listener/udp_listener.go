@@ -2,8 +2,8 @@ package listener
 
 import (
 	"github.com/myzhan/goreplay-udp/proto"
-	"strconv"
 	"log"
+	"strconv"
 )
 
 type UDPListener struct {
@@ -59,6 +59,6 @@ func (l *UDPListener) recv() {
 	}
 }
 
-func (l *UDPListener) Receiver() (chan *proto.UDPMessage) {
+func (l *UDPListener) Receiver() chan *proto.UDPMessage {
 	return l.messagesChan
 }

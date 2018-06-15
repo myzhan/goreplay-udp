@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"time"
 	"github.com/myzhan/goreplay-udp/output"
+	"time"
 )
 
 // MultiOption allows to specify multiple flags with same name and collects all values into array

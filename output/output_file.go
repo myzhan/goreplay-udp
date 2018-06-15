@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"compress/gzip"
 	"fmt"
+	"github.com/myzhan/goreplay-udp/proto"
 	"io"
 	"log"
 	"os"
@@ -14,7 +15,6 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"github.com/myzhan/goreplay-udp/proto"
 )
 
 var dateFileNameFuncs = map[string]func(*FileOutput) string{
