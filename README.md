@@ -1,6 +1,6 @@
 # About
 
-GoReplay-udp is copycat of [goreplay](https://github.com/buger/goreplay), workers on UDP tracffic.
+GoReplay-udp is copycat of [goreplay](https://github.com/buger/goreplay), works on UDP tracffic.
 
 It's currently a toy project and not tested as well as goreplay.
 
