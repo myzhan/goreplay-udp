@@ -21,7 +21,7 @@ go build -ldflags '-extldflags "-static"'
 
 ```
 # Running as non root user
-sudo etcap "cap_net_raw,cap_net_admin+eip" ./goreplay-udp
+sudo setcap "cap_net_raw,cap_net_admin+eip" ./goreplay-udp
 # Test
 sudo ./goreplay-udp --input-udp :22 --output-stdout
 # Capture
