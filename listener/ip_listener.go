@@ -242,9 +242,6 @@ func (l *IPListener) readPcap() {
 
 			for {
 				packet, err := source.NextPacket()
-
-				packet.TransportLayer()
-
 				if err == io.EOF {
 					break
 				} else if err != nil {
