@@ -165,6 +165,7 @@ func (l *IPListener) readPcap() {
 				inactive.SetSnapLen(65536)
 			}
 
+			inactive.SetTimeout(-1 * time.Second)
 			inactive.SetPromisc(true)
 
 			handle, herr := inactive.Activate()
