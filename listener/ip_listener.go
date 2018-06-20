@@ -1,9 +1,7 @@
 package listener
 
 import (
-	"encoding/binary"
 	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 	"io"
 	"log"
@@ -17,7 +15,8 @@ import (
 
 type ipPacket struct {
 	srcIP     []byte
-	data      []byte
+	dstIP     []byte
+	payload   []byte
 	timestamp time.Time
 }
 
@@ -128,10 +127,11 @@ func findPcapDevices(addr string) (interfaces []pcap.Interface, err error) {
 	return interfaces, nil
 }
 
-func (l *IPListener) buildPacket(packetSrcIP []byte, packetData []byte, timestamp time.Time) *ipPacket {
+func (l *IPListener) buildPacket(srcIP []byte, dstIP []byte, payload []byte, timestamp time.Time) *ipPacket {
 	return &ipPacket{
-		srcIP:     packetSrcIP,
-		data:      packetData,
+		srcIP:     srcIP,
+		dstIP:     dstIP,
+		payload:   payload,
 		timestamp: timestamp,
 	}
 }
@@ -223,100 +223,28 @@ func (l *IPListener) readPcap() {
 
 			l.mu.Unlock()
 
-			var decoder gopacket.Decoder
-
-			// Special case for tunnel interface https://github.com/google/gopacket/issues/99
-			if handle.LinkType() == 12 {
-				decoder = layers.LayerTypeIPv4
-			} else {
-				decoder = handle.LinkType()
-			}
-
-			source := gopacket.NewPacketSource(handle, decoder)
+			source := gopacket.NewPacketSource(handle, handle.LinkType())
 			source.Lazy = true
 			source.NoCopy = true
 
 			wg.Done()
-
-			var data, srcIP []byte
 
 			for {
 				packet, err := source.NextPacket()
 				if err == io.EOF {
 					break
 				} else if err != nil {
+					log.Println("NextPacket error:", err)
 					continue
 				}
 
-				// We should remove network layer before parsing TCP/IP data
-				var of int
-				switch decoder {
-				case layers.LinkTypeEthernet:
-					of = 14
-				case layers.LinkTypePPP:
-					of = 1
-				case layers.LinkTypeFDDI:
-					of = 13
-				case layers.LinkTypeNull:
-					of = 4
-				case layers.LinkTypeLoop:
-					of = 4
-				case layers.LinkTypeRaw, layers.LayerTypeIPv4:
-					of = 0
-				case layers.LinkTypeLinuxSLL:
-					of = 16
-				default:
-					log.Println("Unknown ipPacket layer", decoder, packet)
-					break
-				}
+				networkLayer := packet.NetworkLayer()
 
-				data = packet.Data()[of:]
+				srcIP := networkLayer.NetworkFlow().Src().Raw()
+				dstIP := networkLayer.NetworkFlow().Dst().Raw()
+				payload := networkLayer.LayerPayload()
 
-				version := uint8(data[0]) >> 4
-				ipLength := int(binary.BigEndian.Uint16(data[2:4]))
-
-				if version == 4 {
-					ihl := uint8(data[0]) & 0x0F
-
-					// Truncated IP info
-					if len(data) < int(ihl*4) {
-						continue
-					}
-
-					srcIP = data[12:16]
-					//dstIP = data[16:20]
-
-					// Too small IP ipPacket
-					if ipLength < 20 {
-						continue
-					}
-
-					// Invalid length
-					if int(ihl*4) > ipLength {
-						continue
-					}
-
-					if cmp := len(data) - ipLength; cmp > 0 {
-						data = data[:ipLength]
-					} else if cmp < 0 {
-						// Truncated ipPacket
-						continue
-					}
-
-					data = data[ihl*4:]
-				} else {
-					// Truncated IP info
-					if len(data) < 40 {
-						continue
-					}
-
-					srcIP = data[8:24]
-					//dstIP = data[24:40]
-
-					data = data[40:]
-				}
-
-				l.ipPacketsChan <- l.buildPacket(srcIP, data, packet.Metadata().Timestamp)
+				l.ipPacketsChan <- l.buildPacket(srcIP, dstIP, payload, packet.Metadata().Timestamp)
 			}
 
 		}(d)
