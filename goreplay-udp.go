@@ -14,6 +14,9 @@ var closeCh chan int
 
 func main() {
 
+	// add line number to log
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
 	if !flag.Parsed() {
 		flag.Parse()
 	}
