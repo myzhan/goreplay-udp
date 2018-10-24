@@ -35,9 +35,6 @@ func NewUDPClient(address string, timeout time.Duration, ignoreResponse bool) (c
 }
 
 func (c *UDPClient) Send(data []byte) (resp []byte, err error) {
-
-	c.conn.SetReadDeadline(time.Now().Add(c.timeout))
-
 	_, err = c.conn.Write(data)
 	if err != nil {
 		log.Printf("UDP Write Error: %v\n", err)
@@ -48,6 +45,7 @@ func (c *UDPClient) Send(data []byte) (resp []byte, err error) {
 	}
 
 	resp = make([]byte, 4096)
+	c.conn.SetReadDeadline(time.Now().Add(c.timeout))
 	respLength, err := c.conn.Read(resp)
 	if err != nil {
 		log.Printf("UDP Read Error: %v\n", err)
