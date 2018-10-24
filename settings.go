@@ -3,8 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/myzhan/goreplay-udp/output"
 	"time"
+
+	"github.com/myzhan/goreplay-udp/output"
 )
 
 // MultiOption allows to specify multiple flags with same name and collects all values into array
@@ -69,5 +70,6 @@ func init() {
 	flag.DurationVar(&Settings.outputUDPConfig.Timeout, "output-udp-timeout", 5*time.Second, "Specify UDP request/response timeout. By default 5s. Example: --output-udp-timeout 30s")
 	flag.BoolVar(&Settings.outputUDPConfig.Stats, "output-udp-stats", false, "Report udp output queue stats to console every 5 seconds")
 	flag.BoolVar(&Settings.outputUDPConfig.IgnoreResponse, "output-udp-ignore-response", false, "Ignore UDP Response")
+	flag.UintVar(&Settings.outputUDPConfig.Replicas, "output-udp-replicas", uint(1), "Replicas of request")
 
 }

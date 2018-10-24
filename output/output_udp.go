@@ -1,11 +1,12 @@
 package output
 
 import (
+	"sync/atomic"
+	"time"
+
 	"github.com/myzhan/goreplay-udp/client"
 	"github.com/myzhan/goreplay-udp/proto"
 	"github.com/myzhan/goreplay-udp/stats"
-	"sync/atomic"
-	"time"
 )
 
 const initialDynamicWorkers = 10
@@ -15,6 +16,7 @@ type UDPOutputConfig struct {
 	Timeout        time.Duration
 	Stats          bool
 	IgnoreResponse bool
+	Replicas       uint
 }
 
 type UDPOutPut struct {
@@ -107,10 +109,11 @@ func (o *UDPOutPut) Write(data []byte) (n int, err error) {
 	buf := make([]byte, len(data))
 	copy(buf, data)
 
-	o.queue <- buf
-
-	if o.config.Stats {
-		o.queueStats.Write(len(o.queue))
+	for i := uint(0); i < o.config.Replicas; i++ {
+		o.queue <- buf
+		if o.config.Stats {
+			o.queueStats.Write(len(o.queue))
+		}
 	}
 
 	if o.config.Workers == 0 {
