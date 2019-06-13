@@ -27,7 +27,7 @@ sudo ./goreplay-udp --input-udp :22 --output-stdout
 # Capture
 sudo ./goreplay-udp --input-udp :22 --output-file dns.req
 # Replay Online
-sudo ./goreplay-udp --input-udp :22 --output-dns localhost:2222
+sudo ./goreplay-udp --input-udp :22 --output-udp localhost:2222
 # Replay Offline
 sudo ./goreplay-udp --input-file dns.req --output-udp localhost:2222
 ```
